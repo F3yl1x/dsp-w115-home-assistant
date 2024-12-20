@@ -5,17 +5,31 @@ async def async_setup_platform(hass, config, async_add_entities, discovery_info=
     """Set up the Smart Plug switch."""
     host = config.get("host")
     pin = config.get("pin")
-    plug = SmartPlug(host, pin)
-    async_add_entities([SmartPlugSwitch(plug)])
+    unique_id = config.get("unique_id")
+    name = config.get("name")
+    plug = SmartPlug(host, pin, hass)
+    await plug.connect(hass)
+    plug.send_upgrade()
+    plug.send_login()
+    async_add_entities([SmartPlugSwitch(plug, unique_id, name)])
 
 class SmartPlugSwitch(SwitchEntity):
-    def __init__(self, plug):
+    def __init__(self, plug, unique_id, name):
         self.plug = plug
         self._state = False
+        self._unique_id = unique_id
+        self._name = name
+
+    @property
+    def unique_id(self):
+        """
+        Gibt die eindeutige ID der Entität zurück.
+        """
+        return self._unique_id
 
     @property
     def name(self):
-        return "D-Link Smart Plug"
+        return self._name
 
     @property
     def is_on(self):
