@@ -180,7 +180,7 @@ class HybiParser:
 
 class SmartPlug:
 
-    def __init__(self, host, pin, model="W245", verbose=0):
+    def __init__(self, host, pin, hass, model="W245", verbose=0):
         self.socket = None
         self.host = host
         self.port = 8080
@@ -189,19 +189,22 @@ class SmartPlug:
         self.obj = {}
         self.verbose = verbose
         self.parser = HybiParser()
-        self.connect()
-        self.send_upgrade()
-        self.send_login()
 
-    def connect(self):
-        sock = socket.create_connection((self.host, self.port))
+    def _create_ssl_context(self):
+        # Diese Methode wird im Thread ausgeführt
         ctx = ssl.create_default_context()
-        ctx.check_hostname = False
-        ctx.set_ciphers('DEFAULT')
-        ctx.verify_mode = ssl.CERT_NONE
+        ctx.load_default_certs(purpose=ssl.Purpose.SERVER_AUTH)
+        return ctx
+
+    async def connect(self, hass):
+        sock = socket.create_connection((self.host, self.port))
+        self.ctx = await hass.async_add_executor_job(self._create_ssl_context)
+        self.ctx.check_hostname = False
+        self.ctx.set_ciphers('DEFAULT')
+        self.ctx.verify_mode = ssl.CERT_NONE
 
         sock.settimeout(10)
-        self.socket = ctx.wrap_socket(sock, server_hostname=self.host)
+        self.socket = self.ctx.wrap_socket(sock, server_hostname=self.host)
 
 
 
