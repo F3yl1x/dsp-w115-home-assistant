@@ -9,7 +9,7 @@ Setup the switch with:
 ```
 switch:
   - platform: smartplug
-    name: W115-SmartPlug
-    host: "YOUR-IP"
-    pin: "xxxxxx"
+    unique_id: switch.w115-smartplug
+    host: "192.168.3.172"
+    pin: "792417"
 ```
