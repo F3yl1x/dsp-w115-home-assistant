@@ -2,8 +2,8 @@
     "domain": "smartplug",
     "name": "Smart Plug Integration",
     "version": "1.0",
-    "documentation": "https://www.example.com",
+    "documentation": "https://github.com/F3yl1x/dsp-w115-home-assistant",
     "requirements": [],
     "dependencies": [],
-    "codeowners": ["@your-github-username"]
+    "codeowners": ["https://github.com/F3yl1x"]
 }
