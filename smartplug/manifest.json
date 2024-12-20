@@ -1,0 +1,9 @@
+{
+    "domain": "smartplug",
+    "name": "Smart Plug Integration",
+    "version": "1.0",
+    "documentation": "https://www.example.com",
+    "requirements": [],
+    "dependencies": [],
+    "codeowners": ["@your-github-username"]
+}
